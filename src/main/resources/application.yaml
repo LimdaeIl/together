@@ -1,0 +1,85 @@
+server:
+  port: 30000
+
+spring:
+  application:
+    name: together-app
+
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:mysql://${RDS_ENDPOINT}:3377/together?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true&cachePrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048&useServerPrepStmts=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+
+  jpa:
+    defer-datasource-initialization: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        show_sql: true
+        jdbc.time_zone: Asia/Seoul
+        generate_statistics: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      client-type: lettuce
+      client-name: ${spring.application.name}
+      connect-timeout: 2s
+      timeout: 2s
+      ssl:
+        enabled: ${REDIS_SSL:false}
+
+      lettuce:
+        pool:
+          enabled: false   # 🔹 일단 풀 비활성화
+          # 밑의 값들은 의미 없어짐
+          # max-active: 32
+          # max-idle: 16
+          # min-idle: 2
+          # max-wait: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+security:
+  current-user:
+    allow-header-fallback: false
+
+  jwt:
+    secret:
+      access: ${ACCESS_SECRET}
+      refresh: ${REFRESH_SECRET}
+    access-token-expiration: ${ACCESS_TOKEN_EXPIRATION:36000000}
+    refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION:86400000}
+
+    filter:
+      default-path-pattern: REQUIRED
+      exclude-path-patterns:
+        - /actuator/**
+        - /docs/**
+        - /favicon.ico
+        - /api/v1/auths/**
+        - /v3/api-docs/**
+        - /swagger-ui/**
+        - /swagger-ui.html
+      optional-path-patterns:
+        - /users/**
+      include-path-patterns:
+        - /api/**
+

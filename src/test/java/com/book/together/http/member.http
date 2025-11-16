@@ -1,0 +1,48 @@
+### 회원가입
+POST http://localhost:30000/api/v1/auths/signup
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "test@12345",
+  "name": "test",
+  "companyName": "test"
+}
+
+<> 2025-11-16T133951.200.json
+<> 2025-11-16T132550.200.json
+<> 2025-11-16T132543.400.json
+<> 2025-11-16T131510.400.json
+
+### 로그인
+POST http://localhost:30000/api/v1/auths/sign-in
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "test@12345"
+}
+
+<> 2025-11-16T133952.200.json
+<> 2025-11-16T133353.200.json
+<> 2025-11-16T132642.200.json
+<> 2025-11-16T132551.200.json
+<> 2025-11-16T131402.200.json
+<> 2025-11-16T131223.401.json
+### 로그아웃
+POST http://localhost:30000/api/v1/auths/logout
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYzMjY3MTUxLCJleHAiOjE3NjMzMDMxNTEsIlVTRVJfUk9MRSI6IlVTRVIiLCJqdGkiOiIyMTg3OTQ5NC1iYjgyLTRkNTEtOTcwOC1kYjg3MWExMTU0M2QifQ.Hcr7pccXye358XhhB6NkEA75HbCLlJ929RN6gE5kpvQ
+
+{
+  "rt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYzMjY3MTUxLCJleHAiOjE3NjMzNTM1NTEsImp0aSI6IjZhZTJkYWJmLTBhMWItNGUzYi1iYTJmLWVhOWY4NWRiOThlNyJ9.ACkHklE2tCNX0dF_QnBWDlj0Epll0PFStYqs1R8qmZg"
+}
+
+### 재발급
+POST http://localhost:30000/api/v1/auths/token-reissue
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYzMjY3OTkyLCJleHAiOjE3NjMzMDM5OTIsIlVTRVJfUk9MRSI6IlVTRVIiLCJqdGkiOiI0ZDZkZDAzMy1hZDJmLTQyNzktODhkNC1iMDJkYmFjMDA4ZjgifQ.FoL8jjfWF2cKrkM0CnCBmaTELZ4bgzOGVNX-1fcL3iI
+
+{
+  "rt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzYzMjY3OTkyLCJleHAiOjE3NjMzNTQzOTIsImp0aSI6ImViYTdjZTExLWJhNWUtNGI0My1iOGUzLWJkYjA0MjUyYzk5MiJ9.UyTxIZH6rrT5-b4CMVwqNRAqA1_BgqdnnWo8aZHaQXs"
+}

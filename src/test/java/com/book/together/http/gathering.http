@@ -1,0 +1,161 @@
+### 회원 A 가입
+POST http://localhost:30000/api/v1/auths/signup
+Content-Type: application/json
+
+{
+  "email": "userA@test.com",
+  "password": "test@12345",
+  "name": "userA",
+  "companyName": "A 회사"
+}
+
+### 회원 A 로그인
+POST http://localhost:30000/api/v1/auths/sign-in
+Content-Type: application/json
+
+{
+  "email": "userA@test.com",
+  "password": "test@12345"
+}
+
+> {%
+  client.global.set("ACCESS_TOKEN_USER_A", response.body.data.at)
+%}
+
+### 회원 A – 모임 생성 (정원 3명짜리)
+POST http://localhost:30000/api/v1/gatherings
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN_USER_A}}
+
+{
+  "name": "테스트 모임 - 정원 3명",
+  "capacity": 3,
+  "dateTime": "2025-11-19T16:09:07",
+  "location": "건대입구",
+  "registrationEnd": "2025-11-18T16:01:07",
+  "type": "DALLAEMFIT",
+  "image": ""
+}
+
+> {%
+  client.global.set("GATHERING_ID", response.body.data.id)
+%}
+
+### 회원 B 가입
+POST http://localhost:30000/api/v1/auths/signup
+Content-Type: application/json
+
+{
+  "email": "userB@test.com",
+  "password": "test@12345",
+  "name": "userB",
+  "companyName": "B 회사"
+}
+
+### 회원 B 로그인
+POST http://localhost:30000/api/v1/auths/sign-in
+Content-Type: application/json
+
+{
+  "email": "userB@test.com",
+  "password": "test@12345"
+}
+
+> {%
+  client.global.set("ACCESS_TOKEN_USER_B", response.body.data.at)
+%}
+
+### 회원 B – 모임 참여
+POST http://localhost:30000/api/v1/gatherings/{{GATHERING_ID}}/join
+Authorization: Bearer {{ACCESS_TOKEN_USER_B}}
+
+###
+
+# 기대 결과:
+# - HTTP 200 OK
+# - body: { "data": "모임에 참여했습니다.", ... } 또는 유사한 성공 응답
+
+
+### 회원 C 가입
+POST http://localhost:30000/api/v1/auths/signup
+Content-Type: application/json
+
+{
+  "email": "userC@test.com",
+  "password": "test@12345",
+  "name": "userC",
+  "companyName": "C 회사"
+}
+
+###
+
+### 회원 C 로그인
+POST http://localhost:30000/api/v1/auths/sign-in
+Content-Type: application/json
+
+{
+  "email": "userC@test.com",
+  "password": "test@12345"
+}
+
+> {%
+  client.global.set("ACCESS_TOKEN_USER_C", response.body.data.at)
+%}
+
+### 회원 C – 모임 참여
+POST http://localhost:30000/api/v1/gatherings/{{GATHERING_ID}}/join
+Authorization: Bearer {{ACCESS_TOKEN_USER_C}}
+
+###
+
+# 기대 결과:
+# - HTTP 200 OK
+# - 이제 이 모임은 정원 2/2가 됨 (participantCount = 2)
+
+
+### 회원 D 가입
+POST http://localhost:30000/api/v1/auths/signup
+Content-Type: application/json
+
+{
+  "email": "userD@test.com",
+  "password": "test@12345",
+  "name": "userD",
+  "companyName": "D 회사"
+}
+
+###
+
+### 회원 D 로그인
+POST http://localhost:30000/api/v1/auths/sign-in
+Content-Type: application/json
+
+{
+  "email": "userD@test.com",
+  "password": "test@12345"
+}
+
+> {%
+  client.global.set("ACCESS_TOKEN_USER_D", response.body.data.at)
+%}
+
+### 회원 D – 모임 참여 시도 (정원 초과)
+POST http://localhost:30000/api/v1/gatherings/{{GATHERING_ID}}/join
+Authorization: Bearer {{ACCESS_TOKEN_USER_D}}
+
+###
+
+# 기대 결과:
+# - HTTP 400 BAD_REQUEST (또는 너가 설정한 상태코드)
+# - body 안에 "모임: 이미 정원이 모두 차서 참여할 수 없습니다." (GATHERING_FULL) 메시지
+
+
+### 회원 B – 같은 모임에 다시 참여 시도 (중복 요청)
+POST http://localhost:30000/api/v1/gatherings/{{GATHERING_ID}}/join
+Authorization: Bearer {{ACCESS_TOKEN_USER_B}}
+
+###
+
+# 기대 결과:
+# - HTTP 409 CONFLICT (또는 너가 설정한 상태코드)
+# - body 안에 "모임: 이미 참여한 모임입니다." (ALREADY_JOINED) 메시지
